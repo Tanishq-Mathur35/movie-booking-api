@@ -39,6 +39,11 @@ const validateMovieCreateRequest = async (req, res, next) => {
         return res.status(400).json(badRequestResponse);
     }
 
+    if (!req.body.poster) {
+        badRequestResponse.err = "The poster of the movie is not present in the request";
+        return res.status(400).json(badRequestResponse);
+    }
+
     next();
 }
 
