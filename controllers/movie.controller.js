@@ -11,6 +11,12 @@ const { successResponseBody, errorResponseBody } = require("../utils/responseBod
 const createMovie = async (req, res) => {
     try {
         const response = await movieService.createMovie(req.body)
+        if (response.err) {
+            errorResponseBody.err = response.err
+            errorResponseBody.message = "Validation failed on few parameters of the request body"
+
+            return res.status(response.code).json(errorResponseBody)
+        }
 
         successResponseBody.data = response
         successResponseBody.message = "Movie created successfully"
@@ -58,12 +64,37 @@ const getMovie = async (req, res) => {
         }
 
         successResponseBody.data = response
-        return res.status(200).json({ successResponseBody })
+        return res.status(200).json(successResponseBody)
     }
     catch (error) {
         console.log(error)
 
-        return res.status(500).json({ errorResponseBody })
+        return res.status(500).json(errorResponseBody)
+    }
+}
+
+
+/**
+ * @description  Update a movie in the database by ID
+ * @returns 200 - Movie updated successfully
+ */
+const updateMovie = async (req, res) => {
+    try {
+        const response = await movieService.updateMovie(req.params.id, req.body)
+
+        if (response.err) {
+            errorResponseBody.err = response.err
+            errorResponseBody.message = "Validation failed on few parameters of the request body"
+            return res.status(response.code).json(errorResponseBody)
+        }
+
+        successResponseBody.data = response
+        return res.status(200).json(successResponseBody)
+    }
+    catch (err) {
+        console.log(err)
+        errorResponseBody.err = err
+        return res.status(500).json(errorResponseBody)
     }
 }
 
@@ -71,5 +102,6 @@ const getMovie = async (req, res) => {
 module.exports = {
     createMovie,
     deleteMovie,
-    getMovie
+    getMovie,
+    updateMovie
 }
