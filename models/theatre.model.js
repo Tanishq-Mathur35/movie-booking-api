@@ -2,12 +2,13 @@ const mongoose = require('mongoose');
 
 
 /**
- * @description  Theatre model represents a theatre entity in the database. It includes details such as name, description, city, pincode, and address. The schema also includes timestamps for createdAt and updatedAt fields.
+ * @description  Theatre model represents a theatre entity in the database. The schema also includes timestamps for createdAt and updatedAt fields.
  */
 const theatreSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        minLength: 5
     },
     description: String,
     city: {

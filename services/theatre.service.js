@@ -7,6 +7,14 @@ const createTheatre = async (data) => {
         return response
     }
     catch (error) {
+        if (error.name === "ValidationError") {
+            let err = {}
+            Object.keys(error.errors).forEach(key => {
+                err[key] = error.errors[key].message
+            })
+
+            return { err: err, code: 422 }
+        }
         console.log(error)
         throw error
     }
