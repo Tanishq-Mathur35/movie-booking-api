@@ -1,21 +1,24 @@
 const express = require("express")
-const bodyParser = require("body-parser")
 const env = require("dotenv")
 const mongoose = require("mongoose")
 
+const MovieRoutes = require("./routes/movie.routes")
 
 env.config()
 
 const app = express()
 
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+MovieRoutes(app)
+
 app.get("/home", (req, res) => {
-    console.log("Hitting /home endpoint")
     res.json({
         msg: "Fetched home",
         success: true
     })
 })
-
 
 app.listen(process.env.PORT, async () => {
     try {
