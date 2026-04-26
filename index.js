@@ -1,4 +1,5 @@
 const express = require("express")
+const bodyParser = require("body-parser")
 const env = require("dotenv")
 const mongoose = require("mongoose")
 
@@ -10,8 +11,8 @@ env.config()
 
 const app = express()
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 MovieRoutes(app)    // Invoking movie routes
 TheatreRoutes(app)  /// Invoking theatre routes
