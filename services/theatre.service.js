@@ -58,12 +58,62 @@ const getTheatre = async (id) => {
 }
 
 
-const getAllTheatre = async () => {
+const getAllTheatre = async (data) => {
     try {
-        const response = await Theatre.find({})
+        let query = {}
+        let pagination = {}
+
+        if (data && data.city) {
+            query.city = data.city
+        }
+        if (data && data.pincode) {
+            query.pincode = data.pincode
+        }
+        if (data && data.name) {
+            query.name = data.name
+        }
+
+        if (data && data.movieId) {
+            query.movies = { $all: data.movieId }
+        }
+
+        if (data && data.limit) {
+            pagination.limit = data.limit
+        }
+
+        if (data && data.skip) {
+            let perPage = (data.limit) ? data.limit : 3
+            pagination.skip = data.skip * perPage
+        }
+        const response = await Theatre.find(query, {}, pagination)
         return response
     }
     catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
+
+const updateTheatre = async (id, data) => {
+    try {
+        const response = await Theatre.findByIdAndUpdate(id, data, { new: true, runValidators: true })
+        if (!response) {
+            return {
+                err: "No theatre found for the corresponding id provided",
+                code: 404
+            }
+        }
+        return response
+    }
+    catch (error) {
+        if (error.name === "ValidationError") {
+            let err = {}
+            Object.keys(error.errors).forEach(key => {
+                err[key] = error.errors[key].message
+            })
+            return { err: err, code: 422 }
+        }
         console.log(error)
         throw error
     }
@@ -74,5 +124,6 @@ module.exports = {
     createTheatre,
     deleteTheatre,
     getTheatre,
-    getAllTheatre
+    getAllTheatre,
+    updateTheatre
 }
