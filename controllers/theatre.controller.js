@@ -90,6 +90,10 @@ const getTheatres = async (req, res) => {
 }
 
 
+/**
+ * @description  Update a theatre in the database by ID
+ * @returns 200 - Theatre updated successfully
+ */
 const update = async (req, res) => {
     try {
         const response = await theatreService.updateTheatre(req.params.id, req.body)
@@ -109,10 +113,35 @@ const update = async (req, res) => {
 }
 
 
+/**
+ * @description  Update the movies in a theatre in the database by ID
+ * @returns 200 - Theatre movies updated successfully
+ */
+const updateMovies = async (req, res) => {
+    try {
+        const response = await theatreService.updateMoviesInTheatres(req.params.id, req.body.movieIds, req.body.insert)
+        if (response.err) {
+            errorResponseBody.err = response.err
+            return res.status(response.code).json(errorResponseBody)
+        }
+
+        successResponseBody.data = response
+        successResponseBody.message = "Theatre movies updated successfully"
+        return res.status(200).json(successResponseBody)
+    }
+    catch (error) {
+        console.log(error)
+        errorResponseBody.err = error
+        return res.status(500).json(errorResponseBody)
+    }
+}
+
+
 module.exports = {
     createTheatre,
     destroy,
     getTheatre,
     getTheatres,
-    update
+    update,
+    updateMovies
 }
