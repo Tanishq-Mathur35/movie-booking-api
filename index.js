@@ -17,12 +17,6 @@ app.use(bodyParser.json())
 MovieRoutes(app)    // Invoking movie routes
 TheatreRoutes(app)  /// Invoking theatre routes
 
-app.get("/home", (req, res) => {
-    res.json({
-        msg: "Fetched home",
-        success: true
-    })
-})
 
 app.listen(process.env.PORT, async () => {
     try {

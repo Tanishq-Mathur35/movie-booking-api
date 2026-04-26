@@ -103,6 +103,10 @@ const updateMovie = async (req, res) => {
 }
 
 
+/**
+ * @description  Get all movies from the database
+ * @returns 200 - Movies fetched successfully
+ */
 const getMovies = async (req, res) => {
     try {
         const response = await movieService.fetchMovies(req.query)

@@ -2,6 +2,10 @@ const theatreService = require("../services/theatre.service")
 const { successResponseBody, errorResponseBody } = require("../utils/responseBody")
 
 
+/**
+ * @description  Create a new theatre in the database
+ * @returns  201 - Theatre created successfully
+ */
 const createTheatre = async (req, res) => {
     try {
         const response = await theatreService.createTheatre(req.body)
@@ -22,6 +26,10 @@ const createTheatre = async (req, res) => {
 }
 
 
+/**
+ * @description  Delete a theatre from the database by ID
+ * @returns 200 - Theatre deleted successfully
+ */
 const destroy = async (req, res) => {
     try {
         const response = await theatreService.deleteTheatre(req.params.id)
@@ -41,6 +49,10 @@ const destroy = async (req, res) => {
 }
 
 
+/**
+ * @description  Get a theatre from the database by ID
+ * @returns 200 - Theatre fetched successfully
+ */
 const getTheatre = async (req, res) => {
     try {
         const response = await theatreService.getTheatre(req.params.id)
@@ -60,6 +72,10 @@ const getTheatre = async (req, res) => {
 }
 
 
+/**
+ * @description  Get all theatres from the database
+ * @returns 200 - Theatres fetched successfully
+ */
 const getTheatres = async (req, res) => {
     try {
         const response = await theatreService.getAllTheatre()
