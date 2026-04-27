@@ -136,6 +136,10 @@ const updateMovies = async (req, res) => {
 }
 
 
+/**
+ * @description  Get all movies in a theatre from the database by ID
+ * @returns 200 - Movies fetched successfully
+ */
 const getMovies = async (req, res) => {
     try {
         const response = await theatreService.getMoviesInATheatre(req.params.id)
@@ -155,6 +159,29 @@ const getMovies = async (req, res) => {
 }
 
 
+/**
+ * @description  Check if a movie is in a theatre from the database by id
+ * @returns 200 - Movie checked successfully
+ */
+const checkMovie = async (req, res) => {
+    try {
+        const response = await theatreService.checkMovieInTheatre(req.params.theatreId, req.params.movieId)
+        if (response.err) {
+            errorResponseBody.err = response.err
+            return res.status(response.code).json(errorResponseBody)
+        }
+
+        successResponseBody.data = response
+        successResponseBody.message = "Movie checked successfully"
+        return res.status(200).json(successResponseBody)
+    }
+    catch (error) {
+        errorResponseBody.err = error
+        return res.status(500).json(errorResponseBody)
+    }
+}
+
+
 module.exports = {
     createTheatre,
     destroy,
@@ -162,5 +189,6 @@ module.exports = {
     getTheatres,
     update,
     updateMovies,
-    getMovies
+    getMovies,
+    checkMovie
 }
