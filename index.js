@@ -5,6 +5,7 @@ const mongoose = require("mongoose")
 
 const MovieRoutes = require("./routes/movie.routes")
 const TheatreRoutes = require("./routes/theatre.routes")
+const authRoutes = require("./routes/auth.routes")
 
 
 env.config()
@@ -18,6 +19,7 @@ mongoose.set('debug', true)
 
 MovieRoutes(app)    // Invoking movie routes
 TheatreRoutes(app)  /// Invoking theatre routes
+authRoutes(app)     // Invoking auth routes
 
 
 app.listen(process.env.PORT, async () => {
