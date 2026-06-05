@@ -1,14 +1,14 @@
-const Movie = require('../models/movie.model');
-const movieService = require('../services/movie.service');
 const { successRes, errorRes } = require('../utils/responsebody');
+const bookingService = require('../services/booking.services');
 const { STATUS } = require('../utils/constants');
 
 
-const createMovie = async (req, res) => {
+const create = async (req, res) => {
     try {
-        const response = await movieService.addMovie(req.body);
+        let userId = req.user;
+        const response = await bookingService.addBooking({ ...req.body, userId: userId });
+        successRes.message = "Successfully created a booking";
         successRes.data = response;
-        successRes.message = "Successfully created the movie";
         return res.status(STATUS.CREATED).json(successRes);
     } catch (error) {
         if (error.err) {
@@ -18,62 +18,58 @@ const createMovie = async (req, res) => {
         errorRes.err = error;
         return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorRes);
     }
-};
+}
 
 
-const deleteMovie = async (req, res) => {
+const update = async (req, res) => {
     try {
-        const response = await movieService.removeMovie(req.params.id);
+        const response = await bookingService.modifyBooking(req.body, req.params.id);
         successRes.data = response;
-        successRes.message = "Successfully deleted the movie";
+        successRes.message = "Successfully updated the booking";
         return res.status(STATUS.OK).json(successRes);
     } catch (error) {
         if (error.err) {
             errorRes.err = error.err;
             return res.status(error.code).json(errorRes);
         }
+        console.log(error);
         errorRes.err = error;
         return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorRes);
     }
 }
 
 
-const getMovie = async (req, res) => {
+const getBookings = async (req, res, next) => {
     try {
-        const response = await movieService.fetchMovieById(req.params.id);
+        const response = await bookingService.getBookings({ userId: req.user });
         successRes.data = response;
+        successRes.message = "Successfully fetched the bookings";
         return res.status(STATUS.OK).json(successRes);
     } catch (error) {
-        if (error.err) {
-            errorRes.err = error.err;
-            return res.status(error.code).json(errorRes);
-        }
         errorRes.err = error;
         return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorRes);
     }
 }
 
 
-const updateMovie = async (req, res) => {
+const getAllBookings = async (req, res, next) => {
     try {
-        const response = await movieService.modifyMovie(req.params.id, req.body);
+        const response = await bookingService.getAllBookings();
         successRes.data = response;
+        successRes.message = "Successfully fetched the bookings";
         return res.status(STATUS.OK).json(successRes);
     } catch (error) {
-        if (error.err) {
-            errorRes.err = error.err;
-            return res.status(error.code).json(errorRes);
-        }
         errorRes.err = error;
         return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorRes);
     }
 }
 
 
-const getMovies = async (req, res) => {
+const getBookingById = async (req, res, next) => {
     try {
-        const response = await movieService.getAllMovies(req.query);
+        const response = await bookingService.getBookingById(req.params.id, req.user);
         successRes.data = response;
+        successRes.message = "Successfully fetched the booking";
         return res.status(STATUS.OK).json(successRes);
     } catch (error) {
         if (error.err) {
@@ -87,9 +83,9 @@ const getMovies = async (req, res) => {
 
 
 module.exports = {
-    createMovie,
-    deleteMovie,
-    getMovie,
-    updateMovie,
-    getMovies
+    create,
+    update,
+    getBookings,
+    getAllBookings,
+    getBookingById
 }

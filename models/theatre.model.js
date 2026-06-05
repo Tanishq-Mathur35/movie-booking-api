@@ -1,9 +1,5 @@
 const mongoose = require('mongoose');
 
-
-/**
- * @description  Theatre model represents a theatre entity in the database. The schema also includes timestamps for createdAt and updatedAt fields.
- */
 const theatreSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -20,6 +16,11 @@ const theatreSchema = new mongoose.Schema({
         required: true
     },
     address: String,
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     movies: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'Movie'
@@ -27,10 +28,8 @@ const theatreSchema = new mongoose.Schema({
 },
     {
         timestamps: true
-    }
-)
+    });
 
 
-const Theatre = mongoose.model('Theatre', theatreSchema)
-
-module.exports = Theatre
+const Theatre = mongoose.model('Theatre', theatreSchema);
+module.exports = Theatre;

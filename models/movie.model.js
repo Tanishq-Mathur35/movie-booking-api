@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-
-// Schema for storing movie details
 const movieSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -37,20 +35,16 @@ const movieSchema = new mongoose.Schema({
     releaseStatus: {
         type: String,
         required: true,
-        default: "RELEASED",
+        default: "RELEASED"
     },
     poster: {
-        type: String,
-        required: true,
+        type: String, required: true
     }
 },
     {
         timestamps: true
-    }
-);
+    });
 
 
-// Create model from schema
 const Movie = mongoose.model('Movie', movieSchema);
-
 module.exports = Movie;

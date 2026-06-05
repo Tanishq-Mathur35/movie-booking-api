@@ -1,14 +1,13 @@
-const Movie = require('../models/movie.model');
-const movieService = require('../services/movie.service');
+const showService = require('../services/show.service');
 const { successRes, errorRes } = require('../utils/responsebody');
 const { STATUS } = require('../utils/constants');
 
 
-const createMovie = async (req, res) => {
+const create = async (req, res) => {
     try {
-        const response = await movieService.addMovie(req.body);
+        const response = await showService.addShow(req.body);
+        successRes.message = "Successfully created the show";
         successRes.data = response;
-        successRes.message = "Successfully created the movie";
         return res.status(STATUS.CREATED).json(successRes);
     } catch (error) {
         if (error.err) {
@@ -16,16 +15,33 @@ const createMovie = async (req, res) => {
             return res.status(error.code).json(errorRes);
         }
         errorRes.err = error;
-        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorRes);
+        return res.status(STATUS.OK).json(errorRes);
     }
-};
+}
 
 
-const deleteMovie = async (req, res) => {
+const getShows = async (req, res) => {
     try {
-        const response = await movieService.removeMovie(req.params.id);
+        const response = await showService.getShows(req.query);
+        successRes.message = "Successfully fetched the movie shows";
         successRes.data = response;
-        successRes.message = "Successfully deleted the movie";
+        return res.status(STATUS.OK).json(successRes);
+    } catch (error) {
+        if (error.err) {
+            errorRes.err = error.err;
+            return res.status(error.code).json(errorRes);
+        }
+        errorRes.err = error;
+        return res.status(STATUS.INTERNAL_SERVER_ERROR);
+    }
+}
+
+
+const destroy = async (req, res) => {
+    try {
+        const response = await showService.removeShow(req.params.id);
+        successRes.data = response;
+        successRes.message = "Successfully deleted the show";
         return res.status(STATUS.OK).json(successRes);
     } catch (error) {
         if (error.err) {
@@ -38,48 +54,18 @@ const deleteMovie = async (req, res) => {
 }
 
 
-const getMovie = async (req, res) => {
+const update = async (req, res) => {
     try {
-        const response = await movieService.fetchMovieById(req.params.id);
+        const response = await showService.modifyShow(req.params.id, req.body);
         successRes.data = response;
+        successRes.message = "Successfully updated the show";
         return res.status(STATUS.OK).json(successRes);
     } catch (error) {
         if (error.err) {
             errorRes.err = error.err;
             return res.status(error.code).json(errorRes);
         }
-        errorRes.err = error;
-        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorRes);
-    }
-}
-
-
-const updateMovie = async (req, res) => {
-    try {
-        const response = await movieService.modifyMovie(req.params.id, req.body);
-        successRes.data = response;
-        return res.status(STATUS.OK).json(successRes);
-    } catch (error) {
-        if (error.err) {
-            errorRes.err = error.err;
-            return res.status(error.code).json(errorRes);
-        }
-        errorRes.err = error;
-        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorRes);
-    }
-}
-
-
-const getMovies = async (req, res) => {
-    try {
-        const response = await movieService.getAllMovies(req.query);
-        successRes.data = response;
-        return res.status(STATUS.OK).json(successRes);
-    } catch (error) {
-        if (error.err) {
-            errorRes.err = error.err;
-            return res.status(error.code).json(errorRes);
-        }
+        console.log(error);
         errorRes.err = error;
         return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorRes);
     }
@@ -87,9 +73,8 @@ const getMovies = async (req, res) => {
 
 
 module.exports = {
-    createMovie,
-    deleteMovie,
-    getMovie,
-    updateMovie,
-    getMovies
+    create,
+    getShows,
+    destroy,
+    update
 }
