@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const env = require('dotenv');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const path = require("path")
+const dns = require('dns');
 
 const MovieRoutes = require('./routes/movie.routes');
 const theatreRoutes = require('./routes/theatre.routes');
@@ -12,10 +14,12 @@ const bookingRoutes = require('./routes/booking.routes');
 const showRoutes = require('./routes/show.routes');
 const paymentRoutes = require('./routes/payment.routes');
 
+dns.setServers(['1.1.1.1', '8.8.8.8'])
 env.config();
 const app = express();
 
 app.use(cors());
+app.use(express.static(path.join(__dirname)));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
